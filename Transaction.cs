@@ -12,11 +12,10 @@ namespace _20183732_Tommy_Pham
 
 		protected static int _transactionID = 0;
 
-		public Transaction(User user, decimal amount)
+		public Transaction(User user)
 		{
 			id = System.Threading.Interlocked.Increment(ref _transactionID);
 			this.user= user;
-			this.amount = amount;
 
 		}
 
@@ -52,12 +51,13 @@ namespace _20183732_Tommy_Pham
 			set { _date = DateTime.Now; }
 		}
 
-		public virtual string ToString()
+		public virtual string Tostring()
 		{
 			return "ID: " + id + "user: " + user + "amount: " + amount + "date: " + date;
 		}
-		public virtual void Execute()
+		public virtual void Execute(User user, decimal amount)
 		{
+
 		}
 	}
 }

@@ -110,7 +110,7 @@ namespace _20183732_Tommy_Pham
 
 		//public delegate Exception(User user, decimal balance);
 
-		public string ToString()
+		public string Tostring()
 		{
 			return "username: " + username + " email: " + email;
 		}

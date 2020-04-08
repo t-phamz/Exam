@@ -1,6 +1,7 @@
 ﻿//20183732_Tommy_Pham
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace _20183732_Tommy_Pham
 {
@@ -8,22 +9,26 @@ namespace _20183732_Tommy_Pham
 	{
 
 		List<Product> activeProducts = new List<Product>();
-		public void BuyProduct(User u, Product p)
+
+		public void BuyProduct(User user, Product product)
 		{
-			throw new NotImplementedException();
+			BuyTransaction buyProduct = new BuyTransaction(user);
+			buyProduct.Execute(user, product.price);
+
 		}
 
-		public void AddCreditsToAccount(User u, decimal amount)
+		public void AddCreditsToAccount(User user, decimal amount)
+		{
+			InsertCashTransaction insertCredit = new InsertCashTransaction(user);
+			insertCredit.Execute(user, amount);
+		}
+		public void ExecuteTransaction(Transaction transaction)
 		{
 			throw new NotFiniteNumberException();
 		}
-		public void ExecuteTransaction(Transaction t)
+		public Product GetProductByID(int ID, List<Product> list)
 		{
-			throw new NotFiniteNumberException();
-		}
-		public void GetProductByID(int ID)
-		{
-			throw new NotFiniteNumberException();
+			return list[ID-1];
 		}
 
 		public void GetUsers(Func<User, bool> predicate)
@@ -31,14 +36,27 @@ namespace _20183732_Tommy_Pham
 			throw new NotFiniteNumberException();
 		}
 
-		public void GetUserByUsername(string userName)
+		public User GetUserByUsername(string userName, List<User> list)
 		{
-			throw new NotFiniteNumberException();
+			User desiredUser = list.FirstOrDefault(u => u.username == userName);
+			return desiredUser;
 		}
 
-		public void GetTransactions(User u, int i)
+		public List<Transaction> GetTransactions(User user, int count)
 		{
-			throw new NotFiniteNumberException();
+			//List<Transaction> list = new List<Transaction>();
+			//List<Transaction> sortedList = list.OrderByDescending(l => l.id).ToList();
+			//List <Transaction> transactionList = list.Where()
+
+
+			List<Transaction> list = new List<Transaction>();
+			List<Transaction>  transactionList = list.Where(u => u.user.username == user.username).OrderByDescending(s => s.id)
+								.Take(count).ToList();
+
+
+
+
+			return transactionList;
 		}
 
 

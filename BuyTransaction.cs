@@ -9,11 +9,17 @@ namespace _20183732_Tommy_Pham
 		private Product _product;
 		private decimal _amount;
 
-		public BuyTransaction(User user, decimal amount) : base(user, amount)
+		public BuyTransaction(User user, decimal amount) : base(user)
 		{
 			id = System.Threading.Interlocked.Increment(ref _transactionID);
 			this.user = user;
 			this.amount = amount;
+		}
+
+		public decimal amount
+		{
+			get { return _amount; }
+			set { _amount = value; }
 		}
 
 		public Product product
@@ -22,9 +28,9 @@ namespace _20183732_Tommy_Pham
 			set { _product = value; }
 		}
 
-		public override void Execute(User user, decimal price)
+		public override void Execute(User user, decimal amount)
 		{
-			if (user.balance - amount > 0)
+			if (user.balance - amount < 0)
 			{
 				throw new InsufficientCreditsException($"{user.username} did not have sufficient credits for purchase of {product.name}");
 			}
