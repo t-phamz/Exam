@@ -3,16 +3,21 @@ using System;
 
 namespace _20183732_Tommy_Pham
 {
-    public abstract class Transaction
+    public class Transaction
     {
 		private int _id;
-		private string _user;
+		private User _user;
 		private DateTime _date;
 		private decimal _amount;
 
-		public Transaction()
+		protected static int _transactionID = 0;
+
+		public Transaction(User user, decimal amount)
 		{
-				
+			id = System.Threading.Interlocked.Increment(ref _transactionID);
+			this.user= user;
+			this.amount = amount;
+
 		}
 
 		public decimal amount
@@ -26,18 +31,33 @@ namespace _20183732_Tommy_Pham
 			get { return _id; }
 			set { _id = value; }
 		}
-		public string user
+		public User user
 		{
 			get { return _user; }
-			set { _user = value; }
+			set
+			{
+				if (value != null)
+				{
+					_user = value;
+				}
+				else
+				{
+					throw new ArgumentException("User can not be null", "value");
+				}
+			}
 		}
 		public DateTime date
 		{
 			get { return _date; }
-			set { _date = value; }
+			set { _date = DateTime.Now; }
 		}
 
-		public abstract void ToString();
-		public abstract void Execute();
+		public virtual string ToString()
+		{
+			return "ID: " + id + "user: " + user + "amount: " + amount + "date: " + date;
+		}
+		public virtual void Execute()
+		{
+		}
 	}
 }

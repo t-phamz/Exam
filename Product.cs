@@ -11,9 +11,22 @@ namespace _20183732_Tommy_Pham
 		private bool _canBeBoughtOnCredit;
 		private bool _active;
 
-		public Product()
+		protected static int _productID = 0;
+
+		public Product(string name, decimal price, bool active, bool canBeBoughtOnCredit)
 		{
-			
+			id = System.Threading.Interlocked.Increment(ref _productID);
+			this.name = name;
+			this.price = price;
+			this.active = active;
+			this.canBeBoughtOnCredit = canBeBoughtOnCredit;
+		}
+		public Product(string name, decimal price, bool canBeBoughtOnCredit)
+		{
+			this.id = System.Threading.Interlocked.Increment(ref _productID);
+			this.name = name;
+			this.price = price;
+			this.canBeBoughtOnCredit = canBeBoughtOnCredit;
 		}
 
 		public int id
@@ -24,15 +37,24 @@ namespace _20183732_Tommy_Pham
 		public string name
 		{
 			get { return _name; }
-			set { _name = value; }
+			set {
+					if (value != null)
+					{
+						_name = value;
+					}
+					else
+					{
+						throw new CannotBeNullException("The product name can not be null");
+					}
+			}
+			
 		}
-
 		public decimal price
 		{
 			get { return _price; }
 			set { _price = value; }
 		}
-		public bool active
+		public virtual bool active
 		{
 			get { return _active; }
 			set { _active = value; }
@@ -43,16 +65,10 @@ namespace _20183732_Tommy_Pham
 			set { _canBeBoughtOnCredit = value; }
 		}
 
-		public void ToString()
+		public override string ToString()
 		{
-			throw new NotImplementedException();
+			return id +" " + name +" "+ price;
 		}
-
-
-
-
-
-
 
 
 	}

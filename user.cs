@@ -55,7 +55,7 @@ namespace _20183732_Tommy_Pham
 					}
 					else
 					{
-						throw new ArgumentException("The first name can not be null", "value");
+						throw new CannotBeNullException("The product name can not be null");
 					}
 				}
 		}
