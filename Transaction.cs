@@ -1,5 +1,8 @@
 ﻿//20183732_Tommy_Pham
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace _20183732_Tommy_Pham
 {
@@ -14,9 +17,8 @@ namespace _20183732_Tommy_Pham
 
 		public Transaction(User user)
 		{
-			id = System.Threading.Interlocked.Increment(ref _transactionID);
+			this.id = LastIDUsed(@"C:\Users\T-Phamz\Desktop\test.txt");
 			this.user= user;
-			DateTime date = DateTime.Now;
 		}
 
 		public decimal amount
@@ -28,7 +30,10 @@ namespace _20183732_Tommy_Pham
 		public int id
 		{
 			get { return _id; }
-			set { _id = value; }
+			set 
+			{
+				_id = value; 
+			}
 		}
 		public User user
 		{
@@ -48,14 +53,45 @@ namespace _20183732_Tommy_Pham
 		public DateTime date
 		{
 			get { return _date; }
-			set { _date = DateTime.Now; }
+			set { _date = value; }
 		}
-
+		
 		public abstract override string ToString();
-
+		public abstract string ToStringFile();
 		public abstract void Execute(User user, decimal amount);
 
-		public abstract void LogTransaction(Transaction t);
+		public int LastIDUsed(string filePath)
+		{
+			int lastID = 0;
+			foreach (string line in File.ReadLines(filePath))
+			{
+				string[] newList = line.Split(",");
+				lastID = int.Parse(newList[0]);
+			}
+			lastID += 1;
+			return lastID;
+		}
+
+		public void LogTransaction(string filePath)
+		{
+			if (!File.Exists(filePath))
+			{
+				File.Create(filePath).Dispose();
+				using (var st = new StreamWriter(filePath, true))
+				{
+					st.WriteLine(ToStringFile());
+					st.Close();
+				}
+			}
+			else if (File.Exists(filePath))
+			{
+				using (var st = new StreamWriter(filePath, true))
+				{
+					st.WriteLine(ToStringFile());
+					st.Close();
+				}
+			}
+		}
 
 
 

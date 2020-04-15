@@ -153,7 +153,7 @@ namespace _20183732_Tommy_Pham
                     {
                         for (int i = 0; i < numberOfItems-1; i++)
                         {
-                            ss.BuyProduct(ss.GetUserByUsername(user), ss.GetProductByID(productID));
+                            //ss.BuyProduct(ss.GetUserByUsername(user), ss.GetProductByID(productID));
                         }
                         ui.DisplayUserBuysProduct(numberOfItems, ss.BuyProduct(ss.GetUserByUsername(user), ss.GetProductByID(productID)));
                     }
@@ -174,8 +174,11 @@ namespace _20183732_Tommy_Pham
                 if (UserSucess(command[0]))
                 {
                     User u = ss.GetUserByUsername(command[0]);
-                    Console.WriteLine(u.ToString());
-                    ss.GetTransactions(u, 10);
+                    Console.WriteLine(u.ToString() + Environment.NewLine);
+                    foreach (Transaction item in ss.GetTransactions(u, 10))
+                    {
+                        Console.WriteLine($"{item.ToString()}");
+                    }
                     //Hvis saldo er under 50 kr skal brugeren informeres med tekst 
                 }
             }

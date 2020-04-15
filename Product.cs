@@ -56,11 +56,10 @@ namespace _20183732_Tommy_Pham
 			}
 			
 		}
-		//det er 10 fordi at når den bliver læst ind i en liste sker dette to gange.
 		public decimal price
 		{
 			get { return _price; }
-			set { _price = value/10; }
+			set { _price = value; }
 		}
 		public virtual bool active
 		{

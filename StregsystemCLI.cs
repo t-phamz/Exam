@@ -36,7 +36,7 @@ namespace _20183732_Tommy_Pham
             {
                 if (item.active)
                 {
-                    string formattedString = string.Format("{0, 7} - {1, -35} - {2, 8} kr", item.id, item.name, item.price);
+                    string formattedString = string.Format("{0, 7} - {1, -35} - {2, 8}", item.id, item.name, item.price);
                     System.Console.WriteLine(formattedString);
                 }
             }

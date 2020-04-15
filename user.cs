@@ -119,7 +119,7 @@ namespace _20183732_Tommy_Pham
 
 		public override string ToString()
 		{
-			return $"Username: {username} name: {firstName} {lastName} ({email}) Balance: {balance/100} kr";
+			return $"Username: {username} name: {firstName} {lastName} ({email}) Balance: {balance}";
 		}
 
 		public void Equals()

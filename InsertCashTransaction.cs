@@ -7,26 +7,35 @@ namespace _20183732_Tommy_Pham
 	{
 		public InsertCashTransaction(User user, decimal amount) : base(user)
 		{
-			id = System.Threading.Interlocked.Increment(ref _transactionID);
+			id = id;
 			this.user = user;
 			this.amount = amount;
-			decimal currentBalance = user.balance;
-			DateTime date = DateTime.Now;
+			date = DateTime.Now;
+		}
+		public InsertCashTransaction(int id, User user, decimal amount, string kindOfTransaction, DateTime Date): base(user)
+		{
+			this.id = id;
+			this.user = user;
+			this.amount = amount;
+			string transactionType = kindOfTransaction;
+			date = Date;
 		}
 
+		public override string ToStringFile()
+		{
+			return $"{id},InsertCashTransaction,{user.username},{amount},0,{date}";
+		}
 		public override string ToString()
 		{
-			return "Insert cash transaction ID: " + id + "user: " + user + "amount inserted " + amount
-					+ "this transaction transpired: " + date;
+			return $"Insert cash transaction ID: {id} username: {user.username} amount inserted {amount} date of transaction {date}";
 		}
+
 		public override void Execute(User user, decimal amount)
 		{
 			user.balance += amount;
+			LogTransaction(@"C:\Users\T-Phamz\Desktop\test.txt");
 		}
 
-		public override void LogTransaction(Transaction t)
-		{
-			throw new NotImplementedException();
-		}
+
 	}
 }

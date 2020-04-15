@@ -60,7 +60,8 @@ namespace _20183732_Tommy_Pham
 
 		public IEnumerable<Transaction> GetTransactions(User user, int count)
 		{
-			List<Transaction> list = new List<Transaction>();
+			IO io = new IO();
+			List<Transaction> list = io.ReadTransactiontxt(@"C:\Users\T-Phamz\Desktop\test.txt");
 			List<Transaction> transactionList = list.Where(u => u.user.username == user.username).OrderByDescending(s => s.id)
 								.Take(count).ToList();
 

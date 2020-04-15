@@ -10,10 +10,18 @@ namespace _20183732_Tommy_Pham
 
 		public BuyTransaction(User user, Product product) : base(user)
 		{
-			id = System.Threading.Interlocked.Increment(ref _transactionID);
+			this.id = id;
 			this.user = user;
 			this.product = product;
 			date = DateTime.Now;
+		}
+		public BuyTransaction(int id, User user, Product product, string kindOfTransaction, DateTime Date) : base(user)
+		{
+			this.id = id;
+			this.user = user;
+			this.product = product;
+			string transactionType = kindOfTransaction;
+			this.date = Date;
 		}
 
 		public Product product
@@ -36,19 +44,19 @@ namespace _20183732_Tommy_Pham
 			else
 			{
 				user.balance -= product.price;
+				LogTransaction(@"C:\Users\T-Phamz\Desktop\test.txt");
 			}
 
 		}
 
-		public override void LogTransaction(Transaction t)
-		{
-			throw new NotImplementedException();
-		}
-
 		public override string ToString()
 		{
-			return "Buy Transaction ID: " + id + "user: " + user + "price of product(s) " + amount
-		+ "this transaction transpired: " + date;
+			return $"Buy transaction id: {id} username: {user.username} product bought: {product.id} {product.name}  date of transaction {date}";
+		}
+
+		public override string ToStringFile()
+		{
+			return $"{id},BuyTransaction,{user.username},{product.price},{product.id},{date}";
 		}
 	}
 }
