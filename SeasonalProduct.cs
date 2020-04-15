@@ -5,19 +5,20 @@ namespace _20183732_Tommy_Pham
 {
 	public class SeasonalProduct : Product
 	{
+		//tjek hvordan ID fungere med csv filen
 		private DateTime _seasonStartDate;
 		private DateTime _seasonEndDate;
 		private bool _active;
 
-		public SeasonalProduct(string name, decimal price, bool canBeBoughtOnCredit, string seasonStartDate, string seasonEndDate) :base(name, price, canBeBoughtOnCredit)
+		public SeasonalProduct(int id, string name, decimal price, bool active, bool canBeBoughtOnCredit, string seasonStartDate, string seasonEndDate) :base(id, name, price, active, canBeBoughtOnCredit)
 		{
-			id = System.Threading.Interlocked.Increment(ref _productID);
+			this.id = id;
 			this.name = name;
 			this.price = price;
+			this.active = active;
 			this.canBeBoughtOnCredit = canBeBoughtOnCredit;
 			this.seasonStartDate = DateTime.Parse(seasonStartDate);
 			this.seasonEndDate = DateTime.Parse(seasonEndDate);
-			active = active;
 		}
 
 		public DateTime seasonStartDate

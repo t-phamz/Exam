@@ -6,10 +6,11 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 namespace _20183732_Tommy_Pham
-{ 
+{
 	// mangler Equalmetode samt gest hashcode
 	//Delegate advarsel implementation
 	//
+	//tjek hvordan ID fungere med csv filen
 	public class User : IComparable<User>
     {
 		private int _id;
@@ -18,17 +19,16 @@ namespace _20183732_Tommy_Pham
 		private string _userName;
 		private string _email;
 		private decimal _balance;
-
 		private static int _userID = 0;
 
-		public User(string firstName, string lastName, string userName, string email)
+		public User(string firstName, string lastName, string userName, decimal balance, string email)
 		{
 			this.id = System.Threading.Interlocked.Increment(ref _userID);
 			this.firstName = firstName;
 			this.lastName = lastName;
 			this.username = userName;
 			this.email = email;
-			this.balance = 0; 
+			this.balance = balance; 
 
 
 
@@ -43,7 +43,14 @@ namespace _20183732_Tommy_Pham
 		public int id
 		{
 			get { return _id; }
-			set { _id = value; }
+			set 
+			{
+				if (value <= 0)
+				{
+					value = 1;
+				}
+				_id = value;
+			}
 		}
 		public string firstName
 		{
@@ -87,7 +94,7 @@ namespace _20183732_Tommy_Pham
 					}
 					else
 					{
-						throw new ArgumentException("username contains invalid characters", "value");
+					throw new InvalidCharactersException("username contains invalid characters");
 					}
 				}
 		}
@@ -102,7 +109,7 @@ namespace _20183732_Tommy_Pham
 					}
 					else
 					{
-					throw new ArgumentException("Invalid Email", "value");
+					throw new InvalidEmailException("Invalid Email was inputted or invalid characters were detected");
 					}
 					
 				}
@@ -110,14 +117,9 @@ namespace _20183732_Tommy_Pham
 
 		//public delegate Exception(User user, decimal balance);
 
-		public string Tostring()
+		public override string ToString()
 		{
-			return "username: " + username + " email: " + email;
-		}
-
-		public void ToStringTest()
-		{
-			Console.WriteLine($"id: {id} firstname {firstName} lastname {lastName} username {username} email {email} balance {balance}");
+			return $"Username: {username} name: {firstName} {lastName} ({email}) Balance: {balance/100} kr";
 		}
 
 		public void Equals()

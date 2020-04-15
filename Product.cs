@@ -1,46 +1,53 @@
 ﻿//20183732_Tommy_Pham
 using System;
+using System.Text.RegularExpressions;
 
 namespace _20183732_Tommy_Pham
 {
-    public class Product
+	public class Product
     {
+		//tjek hvordan ID fungere med csv filen
 		private int _id;
 		private string _name;
 		private decimal _price;
 		private bool _canBeBoughtOnCredit;
 		private bool _active;
 
-		protected static int _productID = 0;
-
-		public Product(string name, decimal price, bool active, bool canBeBoughtOnCredit)
+		public Product(int id, string name, decimal price, bool active, bool canBeBoughtOnCredit)
 		{
-			id = System.Threading.Interlocked.Increment(ref _productID);
+			this.id = id;
 			this.name = name;
 			this.price = price;
 			this.active = active;
 			this.canBeBoughtOnCredit = canBeBoughtOnCredit;
-		}
-		public Product(string name, decimal price, bool canBeBoughtOnCredit)
-		{
-			this.id = System.Threading.Interlocked.Increment(ref _productID);
-			this.name = name;
-			this.price = price;
-			this.canBeBoughtOnCredit = canBeBoughtOnCredit;
+
 		}
 
 		public int id
 		{
 			get { return _id; }
-			set { _id = value; }
+			set 
+			{
+				if (value <= 0)
+				{
+					value = 1;
+				}
+				_id = value;
+			}
 		}
 		public string name
 		{
 			get { return _name; }
-			set {
+			set 
+			{
+				//Måske brug Regex?
 					if (value != null)
 					{
-						_name = value;
+					string valuetrim = value.Replace("\"", "").Replace("<h1>", "").Replace("</h1>", "").Replace("</h2>", "")
+					.Replace("<h2>", "").Replace("<h3>", "").Replace("</h3>", "").Replace("<b>", "").Replace("</b>", "");
+						_name = valuetrim;
+
+
 					}
 					else
 					{
@@ -49,10 +56,11 @@ namespace _20183732_Tommy_Pham
 			}
 			
 		}
+		//det er 10 fordi at når den bliver læst ind i en liste sker dette to gange.
 		public decimal price
 		{
 			get { return _price; }
-			set { _price = value; }
+			set { _price = value/10; }
 		}
 		public virtual bool active
 		{

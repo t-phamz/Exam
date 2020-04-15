@@ -3,7 +3,7 @@ using System;
 
 namespace _20183732_Tommy_Pham
 {
-    public class Transaction
+    public abstract class Transaction
     {
 		private int _id;
 		private User _user;
@@ -16,7 +16,7 @@ namespace _20183732_Tommy_Pham
 		{
 			id = System.Threading.Interlocked.Increment(ref _transactionID);
 			this.user= user;
-
+			DateTime date = DateTime.Now;
 		}
 
 		public decimal amount
@@ -51,13 +51,13 @@ namespace _20183732_Tommy_Pham
 			set { _date = DateTime.Now; }
 		}
 
-		public virtual string Tostring()
-		{
-			return "ID: " + id + "user: " + user + "amount: " + amount + "date: " + date;
-		}
-		public virtual void Execute(User user, decimal amount)
-		{
+		public abstract override string ToString();
 
-		}
+		public abstract void Execute(User user, decimal amount);
+
+		public abstract void LogTransaction(Transaction t);
+
+
+
 	}
 }

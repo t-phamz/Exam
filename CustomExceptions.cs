@@ -40,6 +40,33 @@ namespace _20183732_Tommy_Pham
 
     }
 
+    [Serializable]
+    public class InvalidEmailException : Exception
+    {
+        public InvalidEmailException()
+        {
+
+        }
+
+        public InvalidEmailException(string message) :base(message)
+        {
+
+        }
+    }
+    [Serializable]
+    public class InvalidCharactersException :Exception
+    {
+        public InvalidCharactersException()
+        {
+
+        }
+        public InvalidCharactersException(string message): base(message)
+        {
+
+        }
+    }
+
+
 
 }
 
