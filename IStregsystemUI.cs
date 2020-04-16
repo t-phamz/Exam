@@ -16,7 +16,8 @@ namespace _20183732_Tommy_Pham
         void DisplayInsufficientCash(User user, Product product);
         void DisplayGeneralError(string errorString);
         void Start();
-        //event StregsystemEvent CommandEntered;
+        public void DisplayTransactions(Transaction t);
+        event StregsystemCLI.StregsystemEvent CommandEntered;
     }
 
 

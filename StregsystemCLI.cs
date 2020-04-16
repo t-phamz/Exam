@@ -5,10 +5,13 @@ using System.Collections.Generic;
 
 namespace _20183732_Tommy_Pham
 {
-    class StregsystemCLI : IStregsystemUI
+    public class StregsystemCLI : IStregsystemUI
     {
         private bool _running = true;
         private IStregsystem ss;
+        public delegate void StregsystemEvent(string command);
+        public event StregsystemEvent CommandEntered;
+
         public StregsystemCLI(IStregsystem ss)
         {
             this.ss = ss;
@@ -17,21 +20,22 @@ namespace _20183732_Tommy_Pham
 
         public void Start()
         {
-            
             Console.Clear();
             StregsystemCommandParser parser = new StregsystemCommandParser(this, ss);
             do
             {
                 DrawMenu();
                 parser.ParseCommand();
+                Console.WriteLine("Press 'return' or 'enter' to continue");
+                Console.ReadKey();
+                
                 
             } while (_running);
         }
 
         public void DrawMenu()
         {
-            //Stregsystem ss = new Stregsystem();
-            Console.WriteLine();
+            Console.Clear();
             foreach (Product item in ss.Products)
             {
                 if (item.active)
@@ -44,7 +48,6 @@ namespace _20183732_Tommy_Pham
                                      "Købet vil blive registreret uden yderligere input. Under feltet vil der vises en bekræftelse af købet");
             System.Console.Write(Environment.NewLine + "Quickbuy:");
         }
-
 
         public void Close()
         {
@@ -64,7 +67,7 @@ namespace _20183732_Tommy_Pham
 
         public void DisplayInsufficientCash(User user, Product product)
         {
-            Console.WriteLine(user.username + " has insufficientCash for " + product.name);
+            Console.WriteLine(user.username + " has insufficient cash for " + product.name);
         }
 
         public void DisplayProductNotFound(string product)
@@ -89,7 +92,7 @@ namespace _20183732_Tommy_Pham
 
         public void DisplayUserInfo(User user)
         {
-            Console.WriteLine(user.ToString());
+            Console.WriteLine(Environment.NewLine + user.ToString() + Environment.NewLine);
         }
 
         public void DisplayUserNotFound(string username)
@@ -97,7 +100,18 @@ namespace _20183732_Tommy_Pham
             Console.WriteLine($"User: \"{username}\" was not found or does not exist");
         }
 
+        public void DisplayTransactions(Transaction t)
+        {
+            Console.WriteLine($"{t.ToString()}");
+        }
 
+        protected virtual void OnCommandEntered(string command)
+        {
+            if (CommandEntered != null)
+            {
+                CommandEntered(command);
+            }
+        }
     }
 
 }

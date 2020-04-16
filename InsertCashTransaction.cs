@@ -33,7 +33,7 @@ namespace _20183732_Tommy_Pham
 		public override void Execute(User user, decimal amount)
 		{
 			user.balance += amount;
-			LogTransaction(@"C:\Users\T-Phamz\Desktop\test.txt");
+			//LogTransaction(@"C:\Users\T-Phamz\Desktop\test.txt");
 		}
 
 

@@ -20,6 +20,7 @@ namespace _20183732_Tommy_Pham
 		private string _email;
 		private decimal _balance;
 		private static int _userID = 0;
+		public delegate void UserBalanceNotification(User user, decimal balance);
 
 		public User(string firstName, string lastName, string userName, decimal balance, string email)
 		{
@@ -122,10 +123,15 @@ namespace _20183732_Tommy_Pham
 			return $"Username: {username} name: {firstName} {lastName} ({email}) Balance: {balance}";
 		}
 
-		public void Equals()
+		public bool Equals(User other)
 		{
-			GetHashCode();
+			return this.firstName.Equals(other.firstName) && this.lastName.Equals(other.lastName);
 
+		}
+
+		public override int GetHashCode()
+		{
+			return HashCode.Combine(firstName, lastName);
 		}
 
 		public int CompareTo(User other)

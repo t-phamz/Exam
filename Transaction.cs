@@ -72,26 +72,7 @@ namespace _20183732_Tommy_Pham
 			return lastID;
 		}
 
-		public void LogTransaction(string filePath)
-		{
-			if (!File.Exists(filePath))
-			{
-				File.Create(filePath).Dispose();
-				using (var st = new StreamWriter(filePath, true))
-				{
-					st.WriteLine(ToStringFile());
-					st.Close();
-				}
-			}
-			else if (File.Exists(filePath))
-			{
-				using (var st = new StreamWriter(filePath, true))
-				{
-					st.WriteLine(ToStringFile());
-					st.Close();
-				}
-			}
-		}
+
 
 
 

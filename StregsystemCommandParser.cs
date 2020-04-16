@@ -11,6 +11,7 @@ namespace _20183732_Tommy_Pham
         IStregsystem ss;
         private readonly Dictionary<string, Action> _adminCommands = new Dictionary<string, Action>();
         private string _command { get; set; }
+
         public StregsystemCommandParser(IStregsystemUI ui, IStregsystem stregsystem)
         {
             this.ss = stregsystem;
@@ -24,75 +25,102 @@ namespace _20183732_Tommy_Pham
             _adminCommands.Add(":quit", () => ui.Close());
             _adminCommands.Add(":activate", () =>
             {
-                if (ProductSuccess(int.Parse(_command.Split(" ")[1])))
+                try
                 {
-                    Product p = ss.GetProductByID(int.Parse(_command.Split(" ")[1]));
-                    if (p is SeasonalProduct)
+                    if (ProductSuccess(int.Parse(_command.Split(" ")[1])))
                     {
-                        ui.DisplayGeneralError($"{p.name} is a seasonal product");
-                        return;
+                        Product p = ss.GetProductByID(int.Parse(_command.Split(" ")[1]));
+                        if (p is SeasonalProduct)
+                        {
+                            ui.DisplayGeneralError($"{p.name} is a seasonal product");
+                            return;
+                        }
+                        p.active = true;
+                        Console.WriteLine($"{p.name} has been activated");
                     }
-                    p.active = true;
-                    Console.WriteLine($"{p.name} has been activated");
                 }
+                catch (FormatException)
+                {
+                    ui.DisplayGeneralError($"{_command.Split(" ")[1]} is not a positive integer");
+                }
+
 
             });
             _adminCommands.Add(":deactivate", () =>
             {
-                if (ProductSuccess(int.Parse(_command.Split(" ")[1])))
+                try
                 {
-                    Product p = ss.GetProductByID(int.Parse(_command.Split(" ")[1]));
-                    if (p is SeasonalProduct)
+                    if (ProductSuccess(int.Parse(_command.Split(" ")[1])))
                     {
-                        ui.DisplayGeneralError($"{p.name} is a seasonal product");
-                        return;
+                        Product p = ss.GetProductByID(int.Parse(_command.Split(" ")[1]));
+                        if (p is SeasonalProduct)
+                        {
+                            ui.DisplayGeneralError($"{p.name} is a seasonal product");
+                            return;
+                        }
+                        p.active = false;
+                        Console.WriteLine($"{p.name} has been deactivated");
                     }
-                    p.active = false;
-                    Console.WriteLine($"{p.name} has been deactivated");
+
+                }
+                catch (FormatException)
+                {
+                    ui.DisplayGeneralError($"{_command.Split(" ")[1]} is not a positive integer");
                 }
             });
             _adminCommands.Add(":crediton", () =>
             {
-                if (ProductSuccess(int.Parse(_command.Split(" ")[1])))
+                try
                 {
-                    Product p = ss.GetProductByID(int.Parse(_command.Split(" ")[1]));
-                    if (p is SeasonalProduct)
+                    if (ProductSuccess(int.Parse(_command.Split(" ")[1])))
                     {
-                        ui.DisplayGeneralError($"{p.name} is a seasonal product");
-                        return;
+                        Product p = ss.GetProductByID(int.Parse(_command.Split(" ")[1]));
+                        if (p is SeasonalProduct)
+                        {
+                            ui.DisplayGeneralError($"{p.name} is a seasonal product");
+                            return;
+                        }
+                        p.canBeBoughtOnCredit = true;
+                        Console.WriteLine($"{p.name} can now be bought on credit");
                     }
-                    p.canBeBoughtOnCredit = true;
-                    Console.WriteLine($"{p.name} can now be bought on credit");
+
+                }
+                catch (FormatException)
+                {
+                    ui.DisplayGeneralError($"{_command.Split(" ")[1]} is not a positive integer");
                 }
             });
             _adminCommands.Add(":creditoff", () =>
             {
-                if (ProductSuccess(int.Parse(_command.Split(" ")[1])))
+                try
                 {
-                    Product p = ss.GetProductByID(int.Parse(_command.Split(" ")[1]));
-                    if (p is SeasonalProduct)
+                    if (ProductSuccess(int.Parse(_command.Split(" ")[1])))
                     {
-                        ui.DisplayGeneralError($"{p.name} is a seasonal product");
-                        return;
+                        Product p = ss.GetProductByID(int.Parse(_command.Split(" ")[1]));
+                        if (p is SeasonalProduct)
+                        {
+                            ui.DisplayGeneralError($"{p.name} is a seasonal product");
+                            return;
+                        }
+                        p.canBeBoughtOnCredit = false;
+                        Console.WriteLine($"{p.name} can now not be bought on credit");
                     }
-                    p.canBeBoughtOnCredit = false;
-                    Console.WriteLine($"{p.name} can now not be bought on credit");
+
+                }
+                catch (FormatException)
+                {
+                    ui.DisplayGeneralError($"{_command.Split(" ")[1]} is not a positive integer");
                 }
             });
             _adminCommands.Add(":addcredits", () =>
             {
                 if (UserSucess(_command.Split(" ")[1]))
                 {
-                    try
-                    {
-                        User u = ss.GetUserByUsername(_command.Split(" ")[1]);
-                        ss.AddCreditsToAccount(u, int.Parse(_command.Split(" ")[2]));
-                        Console.WriteLine($"{_command.Split(" ")[2]} credits has been added to {u.username}");
-                    }
-                    catch (FormatException)
-                    {
-                        ui.DisplayGeneralError($"{_command.Split(" ")[2]} is not a positiv integer");
-                    }
+
+                    User u = ss.GetUserByUsername(_command.Split(" ")[1]);
+                    ss.LogTransaction(ss.AddCreditsToAccount(u, int.Parse(_command.Split(" ")[2])), @"C:\Users\T-Phamz\Desktop\test.txt");
+                    Console.WriteLine($"{_command.Split(" ")[2]} credits has been added to {u.username}");
+
 
                 }
             });
@@ -130,16 +158,16 @@ namespace _20183732_Tommy_Pham
                     int productID = int.Parse(command[1]);
                     if (ProductSuccess(productID) && UserSucess(user))
                     {
-                        ui.DisplayUserBuysProduct(ss.BuyProduct(ss.GetUserByUsername(user), ss.GetProductByID(productID)));
+                        ss.LogTransaction(ss.BuyProduct(ss.GetUserByUsername(user), ss.GetProductByID(productID)), @"C:\Users\T-Phamz\Desktop\test.txt");
                     }
                 }
                 catch (FormatException)
                 {
                     Console.WriteLine($"{(command[1])} is not a positive integer");
                 }
-                catch (Exception ex)
+                catch (InsufficientCreditsException)
                 {
-                    ui.DisplayGeneralError(ex.Message);
+                    ui.DisplayInsufficientCash(ss.GetUserByUsername(command[0]), ss.GetProductByID(int.Parse(command[1])));
                 }
             }
             else if (command.Length == 3)
@@ -153,7 +181,7 @@ namespace _20183732_Tommy_Pham
                     {
                         for (int i = 0; i < numberOfItems-1; i++)
                         {
-                            //ss.BuyProduct(ss.GetUserByUsername(user), ss.GetProductByID(productID));
+                            ss.LogTransaction(ss.BuyProduct(ss.GetUserByUsername(user), ss.GetProductByID(productID)), @"C:\Users\T-Phamz\Desktop\test.txt");
                         }
                         ui.DisplayUserBuysProduct(numberOfItems, ss.BuyProduct(ss.GetUserByUsername(user), ss.GetProductByID(productID)));
                     }
@@ -163,9 +191,9 @@ namespace _20183732_Tommy_Pham
                     Console.WriteLine($"{(command[1])} or {(command[2])} " +
                                       $"is not a number");
                 }
-                catch (Exception ex)
+                catch (InsufficientCreditsException)
                 {
-                    ui.DisplayGeneralError(ex.Message);
+                    ui.DisplayInsufficientCash(ss.GetUserByUsername(command[0]), ss.GetProductByID(int.Parse(command[1])));
                 }
             }
             else if (command.Length == 1)
@@ -174,10 +202,11 @@ namespace _20183732_Tommy_Pham
                 if (UserSucess(command[0]))
                 {
                     User u = ss.GetUserByUsername(command[0]);
-                    Console.WriteLine(u.ToString() + Environment.NewLine);
+                    ui.DisplayUserInfo(u);
+                    ss.OnUserBalanceWarning(u);
                     foreach (Transaction item in ss.GetTransactions(u, 10))
                     {
-                        Console.WriteLine($"{item.ToString()}");
+                        ui.DisplayTransactions(item);
                     }
                     //Hvis saldo er under 50 kr skal brugeren informeres med tekst 
                 }
@@ -189,7 +218,6 @@ namespace _20183732_Tommy_Pham
             Console.WriteLine();
         }
 
-
         public bool ProductSuccess(int id)
         {
             bool res = false;
@@ -200,7 +228,6 @@ namespace _20183732_Tommy_Pham
             }
             catch (System.Exception)
             {
-
                 ui.DisplayProductNotFound(id.ToString());
             }
             return res;

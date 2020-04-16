@@ -6,7 +6,6 @@ namespace _20183732_Tommy_Pham
 {
     public interface IStregsystem
     {
-        //event????
         IEnumerable<Product> Products { get; }
         InsertCashTransaction AddCreditsToAccount(User user, decimal amount);
         BuyTransaction BuyProduct(User user, Product product);
@@ -14,7 +13,9 @@ namespace _20183732_Tommy_Pham
         IEnumerable<Transaction> GetTransactions(User user, int count);
         List<User> GetUsers(Func<User, bool> predicate);
         User GetUserByUsername(string userName);
-        //event UserBalanceNotification UserBalanceWarning;
+        event User.UserBalanceNotification UserBalanceWarning;
+        void OnUserBalanceWarning(User user);
+        public void LogTransaction(Transaction t, string filePath);
 
     }
 

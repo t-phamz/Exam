@@ -6,19 +6,20 @@ using System.IO;
 
 namespace _20183732_Tommy_Pham
 {
-	//MANGLER EXECUTETRANSACTION (HVAD FUCK)
-	//MANGLER USERBALANCENOTIFICATION
 	public class Stregsystem : IStregsystem
 	{
 		public readonly List<User> userList = new List<User>();
 		public readonly List<Product> productList = new List<Product>();
+		public event User.UserBalanceNotification UserBalanceWarning;
 
 		public IEnumerable<Product> Products { get { return productList; } }
 
 		public Stregsystem()
 		{
 			FillUserAndProductList();
+			UserBalanceWarning += NotifyUser;
 		}
+
 
 		public void FillUserAndProductList()
 		{
@@ -49,13 +50,28 @@ namespace _20183732_Tommy_Pham
 		{
 			BuyTransaction buyProduct = new BuyTransaction(user, product);
 			buyProduct.Execute(user, product.price);
+			OnUserBalanceWarning(user);
 			return new BuyTransaction(user, product);
+		}
+
+		public void OnUserBalanceWarning(User user)
+		{
+			User.UserBalanceNotification localCopy = UserBalanceWarning;
+			if (user.balance < 50 && localCopy != null)
+			{
+				UserBalanceWarning(user, user.balance);
+			}
+		}
+
+		public void NotifyUser(User user, decimal balance)
+		{
+			IStregsystemUI ui = new StregsystemCLI(this);
+			ui.DisplayGeneralError($"You have under 50 credits ({balance}) left on account ({user.username})");
 		}
 
 		public Product GetProductByID(int id)
 		{
-
-			return productList[id - 1];
+			return productList.First(p => p.id == id);
 		}
 
 		public IEnumerable<Transaction> GetTransactions(User user, int count)
@@ -86,6 +102,26 @@ namespace _20183732_Tommy_Pham
 				}
 			}
 			return result;
+		}
+		public void LogTransaction(Transaction t, string filePath)
+		{
+			if (!File.Exists(filePath))
+			{
+				File.Create(filePath).Dispose();
+				using (var st = new StreamWriter(filePath, true))
+				{
+					st.WriteLine(t.ToStringFile());
+					st.Close();
+				}
+			}
+			else if (File.Exists(filePath))
+			{
+				using (var st = new StreamWriter(filePath, true))
+				{
+					st.WriteLine(t.ToStringFile());
+					st.Close();
+				}
+			}
 		}
 	}
 }

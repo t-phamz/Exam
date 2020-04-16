@@ -44,7 +44,7 @@ namespace _20183732_Tommy_Pham
 			else
 			{
 				user.balance -= product.price;
-				LogTransaction(@"C:\Users\T-Phamz\Desktop\test.txt");
+				//LogTransaction(@"C:\Users\T-Phamz\Desktop\test.txt");
 			}
 
 		}
