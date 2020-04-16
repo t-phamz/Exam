@@ -114,15 +114,21 @@ namespace _20183732_Tommy_Pham
             });
             _adminCommands.Add(":addcredits", () =>
             {
-                if (UserSucess(_command.Split(" ")[1]))
+                try
+                {
+                    if (UserSucess(_command.Split(" ")[1]))
+                    {
+                        User u = ss.GetUserByUsername(_command.Split(" ")[1]);
+                        ss.LogTransaction(ss.AddCreditsToAccount(u, int.Parse(_command.Split(" ")[2])), @"C:\Users\T-Phamz\Desktop\test.txt");
+                        Console.WriteLine($"{_command.Split(" ")[2]} credits has been added to {u.username}");
+                    }
+                }
+                catch (SystemException)
                 {
 
-                    User u = ss.GetUserByUsername(_command.Split(" ")[1]);
-                    ss.LogTransaction(ss.AddCreditsToAccount(u, int.Parse(_command.Split(" ")[2])), @"C:\Users\T-Phamz\Desktop\test.txt");
-                    Console.WriteLine($"{_command.Split(" ")[2]} credits has been added to {u.username}");
-
-
+                    ui.DisplayGeneralError($"{_command.Split(" ")[2]} is not a positive integer");
                 }
+
             });
         }
 
@@ -136,13 +142,10 @@ namespace _20183732_Tommy_Pham
             if (command[0].StartsWith(":"))
             {
                 bool success = false;
-                foreach (var item in _adminCommands)
+                if (_adminCommands.ContainsKey(command[0]))
                 {
-                    if (_command.StartsWith(item.Key))
-                    {
-                        item.Value();
-                        success = true;
-                    }
+                    _adminCommands[command[0]].Invoke();
+                    success = true;
                 }
                 if (success == false)
                 {
@@ -159,6 +162,8 @@ namespace _20183732_Tommy_Pham
                     if (ProductSuccess(productID) && UserSucess(user))
                     {
                         ss.LogTransaction(ss.BuyProduct(ss.GetUserByUsername(user), ss.GetProductByID(productID)), @"C:\Users\T-Phamz\Desktop\test.txt");
+                        ss.OnUserBalanceWarning(ss.GetUserByUsername(user));
+                        ui.DisplayUserBuysProduct(ss.BuyProduct(ss.GetUserByUsername(user), ss.GetProductByID(productID)));
                     }
                 }
                 catch (FormatException)
@@ -184,6 +189,7 @@ namespace _20183732_Tommy_Pham
                             ss.LogTransaction(ss.BuyProduct(ss.GetUserByUsername(user), ss.GetProductByID(productID)), @"C:\Users\T-Phamz\Desktop\test.txt");
                         }
                         ui.DisplayUserBuysProduct(numberOfItems, ss.BuyProduct(ss.GetUserByUsername(user), ss.GetProductByID(productID)));
+                        ss.OnUserBalanceWarning(ss.GetUserByUsername(user));
                     }
                 }
                 catch (FormatException)
@@ -203,12 +209,11 @@ namespace _20183732_Tommy_Pham
                 {
                     User u = ss.GetUserByUsername(command[0]);
                     ui.DisplayUserInfo(u);
-                    ss.OnUserBalanceWarning(u);
                     foreach (Transaction item in ss.GetTransactions(u, 10))
                     {
                         ui.DisplayTransactions(item);
                     }
-                    //Hvis saldo er under 50 kr skal brugeren informeres med tekst 
+                    ss.OnUserBalanceWarning(u);
                 }
             }
             else

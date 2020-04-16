@@ -3,11 +3,9 @@ using System;
 
 namespace _20183732_Tommy_Pham
 {
-	//hvorfor er der en amount her og en i transaction????
 	public class BuyTransaction : Transaction
 	{
-		private Product _product;
-
+		public Product product { get; set; }
 		public BuyTransaction(User user, Product product) : base(user)
 		{
 			this.id = id;
@@ -15,20 +13,14 @@ namespace _20183732_Tommy_Pham
 			this.product = product;
 			date = DateTime.Now;
 		}
-		public BuyTransaction(int id, User user, Product product, string kindOfTransaction, DateTime Date) : base(user)
+		public BuyTransaction(int id, User user, Product product, DateTime Date) : base(user)
 		{
 			this.id = id;
 			this.user = user;
 			this.product = product;
-			string transactionType = kindOfTransaction;
 			this.date = Date;
 		}
 
-		public Product product
-		{
-			get { return _product; }
-			set { _product = value; }
-		}
 
 		public override void Execute(User user, decimal amount)
 		{
@@ -44,7 +36,6 @@ namespace _20183732_Tommy_Pham
 			else
 			{
 				user.balance -= product.price;
-				//LogTransaction(@"C:\Users\T-Phamz\Desktop\test.txt");
 			}
 
 		}

@@ -1,16 +1,9 @@
 ﻿//20183732_Tommy_Pham
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 namespace _20183732_Tommy_Pham
 {
-	// mangler Equalmetode samt gest hashcode
-	//Delegate advarsel implementation
-	//
-	//tjek hvordan ID fungere med csv filen
 	public class User : IComparable<User>
     {
 		private int _id;
@@ -22,17 +15,14 @@ namespace _20183732_Tommy_Pham
 		private static int _userID = 0;
 		public delegate void UserBalanceNotification(User user, decimal balance);
 
-		public User(string firstName, string lastName, string userName, decimal balance, string email)
+		public User(int id, string firstName, string lastName, string userName, decimal balance, string email)
 		{
-			this.id = System.Threading.Interlocked.Increment(ref _userID);
+			this.id = id;
 			this.firstName = firstName;
 			this.lastName = lastName;
 			this.username = userName;
 			this.email = email;
 			this.balance = balance; 
-
-
-
 		}
 
 		public decimal balance
@@ -110,14 +100,11 @@ namespace _20183732_Tommy_Pham
 					}
 					else
 					{
-					throw new InvalidEmailException("Invalid Email was inputted or invalid characters were detected");
+					throw new InvalidEmailException("Invalid Email or invalid characters were detected");
 					}
 					
 				}
 		}
-
-		//public delegate Exception(User user, decimal balance);
-
 		public override string ToString()
 		{
 			return $"Username: {username} name: {firstName} {lastName} ({email}) Balance: {balance}";

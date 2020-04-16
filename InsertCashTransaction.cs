@@ -12,12 +12,11 @@ namespace _20183732_Tommy_Pham
 			this.amount = amount;
 			date = DateTime.Now;
 		}
-		public InsertCashTransaction(int id, User user, decimal amount, string kindOfTransaction, DateTime Date): base(user)
+		public InsertCashTransaction(int id, User user, decimal amount, DateTime Date): base(user)
 		{
 			this.id = id;
 			this.user = user;
 			this.amount = amount;
-			string transactionType = kindOfTransaction;
 			date = Date;
 		}
 
@@ -33,7 +32,6 @@ namespace _20183732_Tommy_Pham
 		public override void Execute(User user, decimal amount)
 		{
 			user.balance += amount;
-			//LogTransaction(@"C:\Users\T-Phamz\Desktop\test.txt");
 		}
 
 

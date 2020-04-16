@@ -12,7 +12,7 @@ namespace _20183732_Tommy_Pham
 		public readonly List<Product> productList = new List<Product>();
 		public event User.UserBalanceNotification UserBalanceWarning;
 
-		public IEnumerable<Product> Products { get { return productList; } }
+		public IEnumerable<Product> products { get { return productList; } }
 
 		public Stregsystem()
 		{
@@ -33,7 +33,7 @@ namespace _20183732_Tommy_Pham
 
 			foreach (User u in uList)
 			{
-				userList.Add(new User(u.firstName, u.lastName, u.username, u.balance, u.email));
+				userList.Add(new User(u.id, u.firstName, u.lastName, u.username, u.balance, u.email));
 			}
 		}
 
@@ -50,7 +50,6 @@ namespace _20183732_Tommy_Pham
 		{
 			BuyTransaction buyProduct = new BuyTransaction(user, product);
 			buyProduct.Execute(user, product.price);
-			OnUserBalanceWarning(user);
 			return new BuyTransaction(user, product);
 		}
 
@@ -108,19 +107,15 @@ namespace _20183732_Tommy_Pham
 			if (!File.Exists(filePath))
 			{
 				File.Create(filePath).Dispose();
-				using (var st = new StreamWriter(filePath, true))
-				{
-					st.WriteLine(t.ToStringFile());
-					st.Close();
-				}
+				var st = new StreamWriter(filePath, true);
+				st.WriteLine(t.ToStringFile());
+				st.Close();
 			}
 			else if (File.Exists(filePath))
 			{
-				using (var st = new StreamWriter(filePath, true))
-				{
-					st.WriteLine(t.ToStringFile());
-					st.Close();
-				}
+				var st = new StreamWriter(filePath, true);
+				st.WriteLine(t.ToStringFile());
+				st.Close();
 			}
 		}
 	}

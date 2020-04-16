@@ -6,12 +6,11 @@ namespace _20183732_Tommy_Pham
 {
 	public class Product
     {
-		//tjek hvordan ID fungere med csv filen
 		private int _id;
 		private string _name;
-		private decimal _price;
-		private bool _canBeBoughtOnCredit;
 		private bool _active;
+		public decimal price { get; set; }
+		public bool canBeBoughtOnCredit { get; set; }
 
 		public Product(int id, string name, decimal price, bool active, bool canBeBoughtOnCredit)
 		{
@@ -40,7 +39,6 @@ namespace _20183732_Tommy_Pham
 			get { return _name; }
 			set 
 			{
-				//Måske brug Regex?
 					if (value != null)
 					{
 					string valuetrim = value.Replace("\"", "").Replace("<h1>", "").Replace("</h1>", "").Replace("</h2>", "")
@@ -56,21 +54,13 @@ namespace _20183732_Tommy_Pham
 			}
 			
 		}
-		public decimal price
-		{
-			get { return _price; }
-			set { _price = value; }
-		}
+
 		public virtual bool active
 		{
 			get { return _active; }
 			set { _active = value; }
 		}
-		public bool canBeBoughtOnCredit
-		{
-			get { return _canBeBoughtOnCredit; }
-			set { _canBeBoughtOnCredit = value; }
-		}
+
 
 		public override string ToString()
 		{

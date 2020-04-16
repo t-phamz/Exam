@@ -4,9 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-/// <summary>
-/// CANBEBOUGHTONCREDIT??????????????
-/// </summary>
 namespace _20183732_Tommy_Pham
 {
     public class IO
@@ -40,7 +37,7 @@ namespace _20183732_Tommy_Pham
                 string username = newList[3];
                 decimal balance = decimal.Parse(newList[4]);
                 string email = newList[5];
-                userList.Add(new User(firstName, lastName, username, balance, email));
+                userList.Add(new User(id, firstName, lastName, username, balance, email));
             }
             return userList;
         }
@@ -49,41 +46,38 @@ namespace _20183732_Tommy_Pham
         {
             Stregsystem ss = new Stregsystem();
             List<Transaction> transactionList = new List<Transaction>();
-            foreach (string line in File.ReadLines(filePath))
+            try
             {
-                List<string> newList = line.Split(",").ToList();
-                int id = int.Parse(newList[0]);
-                string kindOfTransaction = newList[1];
-                string username = newList[2];
-                decimal amount = decimal.Parse(newList[3]);
-                int productID = int.Parse(newList[4]);
-                DateTime date = DateTime.Parse(newList[5]);
-                User u = ss.GetUserByUsername(username);
+                foreach (string line in File.ReadLines(filePath))
+                {
+                    List<string> newList = line.Split(",").ToList();
+                    int id = int.Parse(newList[0]);
+                    string kindOfTransaction = newList[1];
+                    string username = newList[2];
+                    decimal amount = decimal.Parse(newList[3]);
+                    int productID = int.Parse(newList[4]);
+                    DateTime date = DateTime.Parse(newList[5]);
+                    User u = ss.GetUserByUsername(username);
                 
-                if (kindOfTransaction == "InsertCashTransaction")
-                {
-                    transactionList.Add(new InsertCashTransaction(id, u, amount, kindOfTransaction, date));
+                    if (kindOfTransaction == "InsertCashTransaction")
+                    {
+                        transactionList.Add(new InsertCashTransaction(id, u, amount, date));
+                    }
+                    else if (kindOfTransaction == "BuyTransaction")
+                    {
+                        Product p = ss.GetProductByID(productID);
+                        transactionList.Add(new BuyTransaction(id, u, p, date));
+                    }
                 }
-                else if (kindOfTransaction == "BuyTransaction")
-                {
-                    Product p = ss.GetProductByID(productID);
-                    transactionList.Add(new BuyTransaction(id, u, p, kindOfTransaction, date));
-                }
+                return transactionList;
             }
-            return transactionList;
-        }
+            catch (FileNotFoundException)
+            {
+                File.Create(filePath).Dispose();
+                return transactionList;
+            }
 
-        //public int LastIDUsed(string filePath)
-        //{
-        //    int lastID = 0;
-        //    foreach (string line in File.ReadLines(filePath))
-        //    {
-        //        List<string> newList = line.Split(",").ToList();
-        //        lastID = int.Parse(newList[1]);
-        //    }
-        //    lastID += 1;
-        //    return lastID;
-        //}
+        }
 
     }
 }

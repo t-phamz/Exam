@@ -1,14 +1,13 @@
 ﻿//20183732_Tommy_Pham
 
 using System;
-using System.Collections.Generic;
 
 namespace _20183732_Tommy_Pham
 {
     public class StregsystemCLI : IStregsystemUI
     {
         private bool _running = true;
-        private IStregsystem ss;
+        private readonly IStregsystem ss;
         public delegate void StregsystemEvent(string command);
         public event StregsystemEvent CommandEntered;
 
@@ -16,7 +15,6 @@ namespace _20183732_Tommy_Pham
         {
             this.ss = ss;
         }
-        
 
         public void Start()
         {
@@ -26,7 +24,7 @@ namespace _20183732_Tommy_Pham
             {
                 DrawMenu();
                 parser.ParseCommand();
-                Console.WriteLine("Press 'return' or 'enter' to continue");
+                Console.WriteLine("Press any button to continue");
                 Console.ReadKey();
                 
                 
@@ -36,16 +34,16 @@ namespace _20183732_Tommy_Pham
         public void DrawMenu()
         {
             Console.Clear();
-            foreach (Product item in ss.Products)
+            foreach (Product item in ss.products)
             {
                 if (item.active)
                 {
-                    string formattedString = string.Format("{0, 7} - {1, -35} - {2, 8}", item.id, item.name, item.price);
+                    string formattedString = string.Format("{0, 7} - {1, -35} - {2, 8} credits", item.id, item.name, item.price);
                     System.Console.WriteLine(formattedString);
                 }
             }
             System.Console.WriteLine(Environment.NewLine + "For at købe, Indtast dit brugernavn og et produkt ID (adskildt med \"space\")." +
-                                     "Købet vil blive registreret uden yderligere input. Under feltet vil der vises en bekræftelse af købet");
+                                     " Købet vil blive registreret uden yderligere input. Under feltet vil der vises en bekræftelse af købet");
             System.Console.Write(Environment.NewLine + "Quickbuy:");
         }
 
@@ -102,15 +100,12 @@ namespace _20183732_Tommy_Pham
 
         public void DisplayTransactions(Transaction t)
         {
-            Console.WriteLine($"{t.ToString()}");
+            Console.WriteLine(t.ToString());
         }
 
         protected virtual void OnCommandEntered(string command)
         {
-            if (CommandEntered != null)
-            {
-                CommandEntered(command);
-            }
+            CommandEntered?.Invoke(command);
         }
     }
 

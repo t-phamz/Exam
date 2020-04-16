@@ -1,6 +1,5 @@
 ﻿//20183732_Tommy_Pham
 using System;
-using System.Runtime.Serialization;
 
 namespace _20183732_Tommy_Pham
 {
@@ -53,6 +52,7 @@ namespace _20183732_Tommy_Pham
 
         }
     }
+
     [Serializable]
     public class InvalidCharactersException :Exception
     {

@@ -1,19 +1,15 @@
 ﻿//20183732_Tommy_Pham
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace _20183732_Tommy_Pham
 {
-    public abstract class Transaction
+	public abstract class Transaction
     {
-		private int _id;
 		private User _user;
-		private DateTime _date;
-		private decimal _amount;
-
-		protected static int _transactionID = 0;
+		public decimal amount { get; set; }
+		public DateTime date { get; set; }
+		public int id { get; set; }
 
 		public Transaction(User user)
 		{
@@ -21,20 +17,7 @@ namespace _20183732_Tommy_Pham
 			this.user= user;
 		}
 
-		public decimal amount
-		{
-			get { return _amount; }
-			set { _amount = value; }
-		}
 
-		public int id
-		{
-			get { return _id; }
-			set 
-			{
-				_id = value; 
-			}
-		}
 		public User user
 		{
 			get { return _user; }
@@ -46,16 +29,12 @@ namespace _20183732_Tommy_Pham
 				}
 				else
 				{
-					throw new ArgumentException("User can not be null", "value");
+					throw new ArgumentException("User can not be null");
 				}
 			}
 		}
-		public DateTime date
-		{
-			get { return _date; }
-			set { _date = value; }
-		}
-		
+
+
 		public abstract override string ToString();
 		public abstract string ToStringFile();
 		public abstract void Execute(User user, decimal amount);
@@ -63,13 +42,23 @@ namespace _20183732_Tommy_Pham
 		public int LastIDUsed(string filePath)
 		{
 			int lastID = 0;
-			foreach (string line in File.ReadLines(filePath))
+			try
 			{
-				string[] newList = line.Split(",");
-				lastID = int.Parse(newList[0]);
+				foreach (string line in File.ReadLines(filePath))
+				{
+					string[] newList = line.Split(",");
+					lastID = int.Parse(newList[0]);
+				}
+				lastID += 1;
+				return lastID;
 			}
-			lastID += 1;
-			return lastID;
+			catch (Exception)
+			{
+				File.Create(filePath).Dispose();
+				return 1;
+			}
+			
+
 		}
 
 

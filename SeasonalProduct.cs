@@ -5,10 +5,9 @@ namespace _20183732_Tommy_Pham
 {
 	public class SeasonalProduct : Product
 	{
-		//tjek hvordan ID fungere med csv filen
-		private DateTime _seasonStartDate;
-		private DateTime _seasonEndDate;
 		private bool _active;
+		public DateTime seasonStartDate { get; set; }
+		public DateTime seasonEndDate { get; set; }
 
 		public SeasonalProduct(int id, string name, decimal price, bool active, bool canBeBoughtOnCredit, string seasonStartDate, string seasonEndDate) :base(id, name, price, active, canBeBoughtOnCredit)
 		{
@@ -19,17 +18,6 @@ namespace _20183732_Tommy_Pham
 			this.canBeBoughtOnCredit = canBeBoughtOnCredit;
 			this.seasonStartDate = DateTime.Parse(seasonStartDate);
 			this.seasonEndDate = DateTime.Parse(seasonEndDate);
-		}
-
-		public DateTime seasonStartDate
-		{
-			get { return _seasonStartDate; }
-			set { _seasonStartDate = value; }
-		}
-		public DateTime seasonEndDate
-		{
-			get { return _seasonEndDate; }
-			set { _seasonEndDate = value; }
 		}
 
 		public override bool active

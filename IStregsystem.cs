@@ -6,7 +6,7 @@ namespace _20183732_Tommy_Pham
 {
     public interface IStregsystem
     {
-        IEnumerable<Product> Products { get; }
+        IEnumerable<Product> products { get; }
         InsertCashTransaction AddCreditsToAccount(User user, decimal amount);
         BuyTransaction BuyProduct(User user, Product product);
         Product GetProductByID(int id);

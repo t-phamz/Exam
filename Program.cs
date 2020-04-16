@@ -1,6 +1,4 @@
 ﻿//20183732_Tommy_Pham
-using System;
-using System.Collections.Generic;
 
 namespace _20183732_Tommy_Pham
 {
