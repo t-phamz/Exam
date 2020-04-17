@@ -161,9 +161,10 @@ namespace _20183732_Tommy_Pham
                     int productID = int.Parse(command[1]);
                     if (ProductSuccess(productID) && UserSucess(user))
                     {
-                        ss.LogTransaction(ss.BuyProduct(ss.GetUserByUsername(user), ss.GetProductByID(productID)), @"C:\Users\T-Phamz\Desktop\test.txt");
+                        BuyTransaction buy = ss.BuyProduct(ss.GetUserByUsername(user), ss.GetProductByID(productID));
+                        ss.LogTransaction(buy, @"C:\Users\T-Phamz\Desktop\test.txt");
+                        ui.DisplayUserBuysProduct(buy);
                         ss.OnUserBalanceWarning(ss.GetUserByUsername(user));
-                        ui.DisplayUserBuysProduct(ss.BuyProduct(ss.GetUserByUsername(user), ss.GetProductByID(productID)));
                     }
                 }
                 catch (FormatException)
@@ -173,6 +174,10 @@ namespace _20183732_Tommy_Pham
                 catch (InsufficientCreditsException)
                 {
                     ui.DisplayInsufficientCash(ss.GetUserByUsername(command[0]), ss.GetProductByID(int.Parse(command[1])));
+                }
+                catch (ProductNotActiveException ex)
+                {
+                    ui.DisplayGeneralError(ex.Message);
                 }
             }
             else if (command.Length == 3)
@@ -184,11 +189,12 @@ namespace _20183732_Tommy_Pham
                     int productID = int.Parse(command[2]);
                     if (ProductSuccess(productID) && UserSucess(user))
                     {
+                        BuyTransaction buy = ss.BuyProduct(ss.GetUserByUsername(user), ss.GetProductByID(productID));
                         for (int i = 0; i < numberOfItems-1; i++)
                         {
-                            ss.LogTransaction(ss.BuyProduct(ss.GetUserByUsername(user), ss.GetProductByID(productID)), @"C:\Users\T-Phamz\Desktop\test.txt");
+                            ss.LogTransaction(buy, @"C:\Users\T-Phamz\Desktop\test.txt");
                         }
-                        ui.DisplayUserBuysProduct(numberOfItems, ss.BuyProduct(ss.GetUserByUsername(user), ss.GetProductByID(productID)));
+                        ui.DisplayUserBuysProduct(numberOfItems, buy);
                         ss.OnUserBalanceWarning(ss.GetUserByUsername(user));
                     }
                 }
@@ -201,10 +207,13 @@ namespace _20183732_Tommy_Pham
                 {
                     ui.DisplayInsufficientCash(ss.GetUserByUsername(command[0]), ss.GetProductByID(int.Parse(command[1])));
                 }
+                catch (ProductNotActiveException ex)
+                {
+                    ui.DisplayGeneralError(ex.Message);
+                }
             }
             else if (command.Length == 1)
             {
-                //brugernavn
                 if (UserSucess(command[0]))
                 {
                     User u = ss.GetUserByUsername(command[0]);

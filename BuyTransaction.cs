@@ -42,7 +42,7 @@ namespace _20183732_Tommy_Pham
 
 		public override string ToString()
 		{
-			return $"Buy transaction id: {id} username: {user.username} product bought: {product.id} {product.name}  date of transaction {date}";
+			return $"Buy transaction id: {id} username: {user.username} product bought ID:{product.id} name:{product.name}  date of transaction {date}";
 		}
 
 		public override string ToStringFile()

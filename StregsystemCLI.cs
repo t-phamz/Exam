@@ -70,7 +70,7 @@ namespace _20183732_Tommy_Pham
 
         public void DisplayProductNotFound(string product)
         {
-            Console.WriteLine("\"" + product + "\"" + " can not be found");
+            Console.WriteLine("Product:\"" + product + "\"" + " can not be found");
         }
 
         public void DisplayTooManyArgumentsError(string command)
