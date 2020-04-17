@@ -187,15 +187,20 @@ namespace _20183732_Tommy_Pham
                     string user = command[0];
                     int numberOfItems = int.Parse(command[1]);
                     int productID = int.Parse(command[2]);
-                    if (ProductSuccess(productID) && UserSucess(user))
+                    if (ProductSuccess(productID) && UserSucess(user) && numberOfItems > 0)
                     {
-                        BuyTransaction buy = ss.BuyProduct(ss.GetUserByUsername(user), ss.GetProductByID(productID));
-                        for (int i = 0; i < numberOfItems-1; i++)
+                        BuyTransaction buy = null;
+                        for (int i = 0; i < numberOfItems; i++)
                         {
+                            buy = ss.BuyProduct(ss.GetUserByUsername(user), ss.GetProductByID(productID));
                             ss.LogTransaction(buy, @"C:\Users\T-Phamz\Desktop\test.txt");
                         }
                         ui.DisplayUserBuysProduct(numberOfItems, buy);
                         ss.OnUserBalanceWarning(ss.GetUserByUsername(user));
+                    }
+                    else
+                    {
+                        ui.DisplayGeneralError($"Number of items bought ({command[1]}) can not be under 1");
                     }
                 }
                 catch (FormatException)
